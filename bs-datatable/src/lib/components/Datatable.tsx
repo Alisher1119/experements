@@ -1,5 +1,4 @@
 import {IDatatable} from "../interfaces/datatable.interface";
-import {get, isEmpty} from "lodash";
 import {IHeader} from "../interfaces/header.interface";
 import {IAction} from "../interfaces/action.interface";
 import {FormCheck, OverlayTrigger, Tooltip} from "react-bootstrap";
@@ -10,6 +9,7 @@ export const Datatable = ({
                               actions = [],
                               items = [],
                               page = 1,
+                              limit = 15,
                               className = '',
                               rowClasses = '',
                               rowStyles = {},
@@ -37,7 +37,7 @@ export const Datatable = ({
     }, [JSON.stringify(selectedItems)]);
 
     const selectAll = ($e: any) => {
-        const checked = get($e, 'target.checked');
+        const checked = $e.target.checked;
         if (checked) {
             setSelectedItems(items);
         } else {
@@ -46,7 +46,7 @@ export const Datatable = ({
     }
 
     const selectOne = ($e: any, item: any) => {
-        const checked = get($e, 'target.checked');
+        const checked =  $e.target.checked;
         let tmpSelectedItems = [...selectedItems];
         if (checked) {
             tmpSelectedItems.push(item);
@@ -55,12 +55,12 @@ export const Datatable = ({
         }
         setSelectedItems(tmpSelectedItems);
     }
-    return <>{get(props, 'children') ? <div className="table-responsive">
+    return <>{props.children ? <div className="table-responsive">
         <table className={`${className}`}>
-            {get(props, 'children')}
+            {props.children}
         </table>
     </div> : !loading ? <>
-        {!isEmpty(items) ? <>
+        {items.length > 0 ? <>
             <div className="table-responsive">
                 <table className={`${className}`}>
                     <thead>
@@ -75,9 +75,9 @@ export const Datatable = ({
                             .map((header: IHeader, index: number) => <th
                                 key={index}
                                 className={`fw-normal fw-bold ${header.className}`}>
-                                {get(header, 'title')}
+                                {header.title}
                             </th>)}
-                        {!isEmpty(actions) && <th></th>}
+                        {actions?.length > 0 && <th></th>}
                     </tr>
                     </thead>
                     <tbody>
@@ -85,7 +85,7 @@ export const Datatable = ({
                         key={idx}
                         className={`${rowClasses}`}
                         style={rowStyles} onClick={() => onRowClick(item)}>
-                        {hasIndexNumbers && <td>{(page - 1) * get(items, 'length', 0) + idx + 1}</td>}
+                        {hasIndexNumbers && <td>{(page - 1) * limit + idx + 1}</td>}
                         {hasCheckbox && <td>
                             <FormCheck
                                 checked={selectedItems.some(selectedItem => JSON.stringify(selectedItem) === JSON.stringify(item))}
@@ -94,9 +94,9 @@ export const Datatable = ({
                         </td>}
                         {headers.filter(({hidden}: any) => !hidden).map((header: IHeader, index: number) =>
                             <td key={index}>
-                                {get(item, get(header, 'key'))}
+                                {item[header.key]}
                             </td>)}
-                        {!isEmpty(actions) && <td>
+                        {actions?.length > 0 && <td>
                             {actions.map((btn: IAction, index: number) =>
                                 <OverlayTrigger key={`${idx}-${index}`} placement="top"
                                                 overlay={<Tooltip>{btn.title}</Tooltip>}>
@@ -105,7 +105,7 @@ export const Datatable = ({
                                            $e.stopPropagation();
                                            btn.action(item);
                                        }}>
-                                        <i className={`tx-${btn.variant} ${btn.iconClass}`}></i>
+                                        {btn.icon}
                                     </a></OverlayTrigger>)}
                         </td>}
                     </tr>)}
