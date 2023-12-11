@@ -21,6 +21,6 @@ export interface IDatatable {
     loaderComponent?: any;
 
     // onSort?: (sortFields: any) => {},
-    onRowClick?: (item: any) => {},
-    onItemsSelected?: (items: any[]) => {},
+    onRowClick?: (item: any) => void;
+    onItemsSelected?: (items: any[]) => void;
 }

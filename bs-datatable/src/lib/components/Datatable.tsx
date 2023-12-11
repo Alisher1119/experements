@@ -18,9 +18,9 @@ export const Datatable = ({
                               loading = false,
                               loaderComponent = <div>Loading ...</div>,
                               emptyStateComponent = <div>There is no data!</div>,
-                              onRowClick = (item: any): any => {
+                              onRowClick = (item: any) => {
                               },
-                              onItemsSelected = (items: any[]): any => {
+                              onItemsSelected = (items: any[]) => {
                               },
                               ...props
                           }: IDatatable) => {
@@ -68,7 +68,7 @@ export const Datatable = ({
                         {hasIndexNumbers && <th style={{width: 35}}>#</th>}
                         {hasCheckbox && <th
                             style={{width: '20px'}}>
-                            <FormCheck onChange={selectAll} checked={checked}/>
+                            <FormCheck onChange={selectAll} checked={checked} id={'select-all'}/>
                         </th>}
                         {headers
                             .filter(({hidden}: any) => !hidden)

@@ -1,5 +1,4 @@
 import {IHeader} from "../../../lib/interfaces/header.interface";
-import {HeaderTypeEnum} from "../../../lib/enums/header-type.enum";
 
 export const BS_HEADERS: IHeader[] = [
     {
